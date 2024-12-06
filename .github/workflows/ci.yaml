@@ -3,7 +3,8 @@ name: ML pipeline
 on:
   push:
     branches:
-      - [feature/initialize-project, main]
+      - main
+      - feature/*
   pull_request:
     branches:
       - main
