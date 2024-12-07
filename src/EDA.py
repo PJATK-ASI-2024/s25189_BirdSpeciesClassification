@@ -179,7 +179,7 @@ def main():
     #plot_correration_matrix(df, numeric_cols)
 
     logger.info('Generating EDA report.')
-    generate_report(df)
+    #generate_report(df)
 
     logger.info('EDA completed successfully.')
 

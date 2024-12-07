@@ -29,3 +29,7 @@ jobs:
       - name: Prepare data
         run: |
           python src/01_data_prep.py
+
+      - name: Run EDA
+        run: |
+          python src/EDA.py
