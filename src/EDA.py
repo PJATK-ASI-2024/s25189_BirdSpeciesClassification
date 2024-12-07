@@ -4,6 +4,7 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import seaborn as sns
 import sweetviz as sv
+import os
 
 
     
@@ -55,7 +56,7 @@ def plot_class_distribution(class_counts):
     plt.xticks(rotation=90, ha='right', fontsize=10)
     plt.tight_layout()
     plt.subplots_adjust(bottom=0.3)
-    plt.savefig('/Users/hubertsienicki/Projects/s25189_BirdSpeciesClassification/reports/figures/top_third_distribution.png')
+    plt.savefig('reports/figures/top_third_distribution.png')
     plt.close()
 
     # Save the middle third plot
@@ -67,7 +68,7 @@ def plot_class_distribution(class_counts):
     plt.xticks(rotation=90, ha='right', fontsize=10)
     plt.tight_layout()
     plt.subplots_adjust(bottom=0.3)
-    plt.savefig('/Users/hubertsienicki/Projects/s25189_BirdSpeciesClassification/reports/figures/middle_third_distribution.png')
+    plt.savefig('reports/figures/middle_third_distribution.png')
     plt.close()
 
     # Save the bottom third plot
@@ -79,13 +80,13 @@ def plot_class_distribution(class_counts):
     plt.xticks(rotation=90, ha='right', fontsize=10)
     plt.tight_layout()
     plt.subplots_adjust(bottom=0.3)
-    plt.savefig('/Users/hubertsienicki/Projects/s25189_BirdSpeciesClassification/reports/figures/bottom_third_distribution.png')
+    plt.savefig('reports/figures/bottom_third_distribution.png')
     plt.close()
 
 def plot_image_width_distribution(df):
     df['img_width_px'].hist(bins=30)
     plt.title("Distribution of image width in pixels")
-    plt.savefig('/Users/hubertsienicki/Projects/s25189_BirdSpeciesClassification/reports/figures/image_width_distribution.png')
+    plt.savefig('reports/figures/image_width_distribution.png')
     plt.show()
 
 def plot_rgb_distribution(df):
@@ -94,7 +95,7 @@ def plot_rgb_distribution(df):
     df['mean_b'].hist(bins=30, alpha=0.5, label='mean_b')
     plt.title("Distribution of mean RGB values")
     plt.legend()
-    plt.savefig('/Users/hubertsienicki/Projects/s25189_BirdSpeciesClassification/reports/figures/mean_rgb_distribution.png')
+    plt.savefig('reports/figures/mean_rgb_distribution.png')
     plt.show()
 
 def show_outliers(df, numeric_cols):
@@ -102,7 +103,7 @@ def show_outliers(df, numeric_cols):
     sns.boxplot(data=df[numeric_cols])
     plt.title("Boxplot of numeric columns")
     plt.xticks(rotation=45)
-    plt.savefig('/Users/hubertsienicki/Projects/s25189_BirdSpeciesClassification/reports/figures/boxplot.png')
+    plt.savefig('reports/figures/boxplot.png')
     plt.show()
 
 def plot_correration_matrix(df, numeric_cols):
@@ -110,7 +111,7 @@ def plot_correration_matrix(df, numeric_cols):
     plt.figure(figsize=(10,8))
     sns.heatmap(corr, annot=True, cmap='coolwarm')
     plt.title("Correlation matrix of numeric columns")
-    plt.savefig('/Users/hubertsienicki/Projects/s25189_BirdSpeciesClassification/reports/figures/correlation_matrix.png')
+    plt.savefig('reports/figures/correlation_matrix.png')
     plt.show()
 
 def generate_report(df):
@@ -123,8 +124,11 @@ def main():
     logger.setLevel(logging.DEBUG)
 
     # Create a file handler
-    log_filename = f"/Users/hubertsienicki/Projects/s25189_BirdSpeciesClassification/logs/eda/eda_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
-    file_handler = logging.FileHandler(log_filename)
+    if not os.path.exists('logs/eda'):
+        os.makedirs('logs/eda')
+
+    log_file_path = f'logs/eda/data_eda_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'
+    file_handler = logging.FileHandler(log_file_path)
     file_handler.setLevel(logging.DEBUG)
 
     # Create a logging format
