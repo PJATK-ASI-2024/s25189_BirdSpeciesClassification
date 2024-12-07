@@ -5,3 +5,6 @@ Pillow
 jupyter
 scikit-learn
 kagglehub
+kaggle
+seaborn
+sweetviz
