@@ -17,6 +17,8 @@ FINETUNE_DIR = "data/finetune"
 
 def setup_logging() -> str:
     """Set up logging configuration and return the log file path."""
+    if not os.path.exists("logs/prep"):
+        os.makedirs("logs/prep")
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     log_file_path = f'logs/prep/data_prep_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'
     file_handler = logging.FileHandler(log_file_path)
