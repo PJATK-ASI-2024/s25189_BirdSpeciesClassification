@@ -1,9 +1,9 @@
-import kagglehub
 import logging
 import os
 import shutil
 import random
 import tarfile
+import kagglehub
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -11,7 +11,6 @@ from datetime import datetime
 from PIL import Image
 
 # Global variables
-RAW_DATA_PATH = "data/raw"
 PROCESSED_DATA_PATH = "data/processed"
 TRAIN_DIR = "data/train"
 FINETUNE_DIR = "data/finetune"
@@ -43,7 +42,7 @@ def download_archive() -> str:
     logging.info("Data downloaded to: %s", path)
     return path
 
-def unzip_data():
+def unzip_data(RAW_DATA_PATH: str):
     """Unzip the downloaded data."""
     logging.info("Unzipping data")
     extract_tgz(os.path.join(RAW_DATA_PATH, "CUB_200_2011.tgz"), PROCESSED_DATA_PATH)
@@ -136,7 +135,7 @@ def main():
 
     create_directories()
     RAW_DATA_PATH = download_archive()
-    unzip_data()
+    unzip_data(RAW_DATA_PATH)
 
     meta_df = load_and_merge_data()
     meta_df = meta_df.join(meta_df["image_path"].apply(get_image_stats))
