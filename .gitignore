@@ -7,3 +7,4 @@ defaultdev/
 data/
 .venv/
 logs/
+.idea/
