@@ -52,7 +52,7 @@ def main():
     X_train, X_val, y_train, y_val = train_test_split(x, y, test_size=0.2, random_state=42, stratify=y)
 
     logger.info('Training the TPOT model.') 
-    tpot = TPOTClassifier(generations=5, population_size=20, verbosity=3, scoring='accuracy', random_state=42, n_jobs=2)
+    tpot = TPOTClassifier(generations=1, population_size=10, verbosity=3, scoring='accuracy', random_state=42, n_jobs=1)
     
     logger.info('Fitting the TPOT model.')
     tpot.fit(X_train, y_train)
