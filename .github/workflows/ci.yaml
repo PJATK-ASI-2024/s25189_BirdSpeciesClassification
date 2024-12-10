@@ -33,6 +33,10 @@ jobs:
       - name: Run EDA
         run: |
           python src/EDA.py
+
+      - name: Normalize metadata.csv
+        run: |
+          python src/normalize_metadata.py
       
       - name: Test train model
         run: |
