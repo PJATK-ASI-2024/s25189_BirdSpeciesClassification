@@ -127,6 +127,10 @@ def split_data(meta_df: pd.DataFrame) -> (pd.DataFrame, pd.DataFrame):
     train_indices = all_indices[:train_size]
     finetune_indices = all_indices[train_size:]
 
+    meta_df["class_id"] = meta_df["class_id"] - 1
+
+    print(meta_df["class_id"].view())
+
     train_df = meta_df.loc[train_indices].reset_index(drop=True)
     finetune_df = meta_df.loc[finetune_indices].reset_index(drop=True)
     return train_df, finetune_df
