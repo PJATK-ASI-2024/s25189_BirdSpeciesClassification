@@ -38,6 +38,10 @@ jobs:
         run: |
           python src/normalize_metadata.py
       
-      - name: Test train model
+      # - name: Test train model
+      #   run: |
+      #     python src/autoML_testing.py
+
+      - name: Prepare training data for CNN
         run: |
-          python src/autoML_testing.py
+          python src/CNN/cnn_prep.py
