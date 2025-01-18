@@ -39,7 +39,7 @@ def create_image_labels(script_dir, logger, train_df, test_df):
     train_labels = []
     for idx, row in train_df.iterrows():
         image_path = row['image_path']
-        label = row['class_id'] - 1
+        label = row['class_id']
         train_labels.append((image_path, label))
     train_labels_df = pd.DataFrame(train_labels, columns=['image_path', 'label'])
     logger.info('Training labels generated successfully. Saving labels.csv to disk.')

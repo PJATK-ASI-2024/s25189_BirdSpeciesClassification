@@ -14,3 +14,4 @@ tpot
 torch
 torchvision
 tensorflow
+pytest
