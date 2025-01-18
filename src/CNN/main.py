@@ -1,6 +1,6 @@
 from config import Config
 from dataset import BirdDataset
-from model import BirdCNNModel
+from model import BirdCNNModel, BirdResNetModel
 from trainer import Trainer
 from torch.utils.data import DataLoader
 
@@ -15,8 +15,8 @@ def main():
     train_loader = DataLoader(train_dataset, batch_size=config.batch_size, shuffle=True, num_workers=config.num_workers)
     test_loader = DataLoader(test_dataset, batch_size=config.batch_size, shuffle=False, num_workers=config.num_workers)
 
-    # Initialize model
-    model = BirdCNNModel(num_classes=config.num_classes)
+    # Initialize ResNet model
+    model = BirdResNetModel(num_classes=config.num_classes)
 
     # Initialize trainer
     trainer = Trainer(model, train_loader, test_loader, config)
