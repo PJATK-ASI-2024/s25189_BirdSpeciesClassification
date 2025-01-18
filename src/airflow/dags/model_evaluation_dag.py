@@ -15,27 +15,16 @@ def run_script(script_path):
         raise RuntimeError(f"Script {script_path} failed with code {exit_code}")
 
 with DAG(
-    dag_id='model_training_dag',
+    dag_id='model_evaluation_dag',
     default_args=default_args,
-    description='Build and train an ML model using processed data',
+    description='DAG that evaluates a trained model',
     schedule_interval=None,
     start_date=datetime(2023, 1, 1),
     catchup=False,
 ) as dag:
 
-    # Task 1: Load & Split data for training
-    task_split_data = PythonOperator(
-        task_id='split_data_70_30',
+    evaluate_model_task = PythonOperator(
+        task_id='evaluate_model',
         python_callable=run_script,
-        op_kwargs={'script_path': '/opt/airflow/scripts/CNN/cnn_prep.py'},
+        op_kwargs={'script_path': '/opt/airflow/scripts/evaluate_model.py'},
     )
-
-    # Task 2: AutoML or manual training
-    task_train_model = PythonOperator(
-        task_id='train_model',
-        python_callable=run_script,
-        op_kwargs={'script_path': '/opt/airflow/scripts/CNN/main.py'},
-    )
-
-    # Define the pipeline
-    task_split_data >> task_train_model

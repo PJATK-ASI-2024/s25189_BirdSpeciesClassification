@@ -32,7 +32,7 @@ class BirdDataset(Dataset):
 
     def __getitem__(self, idx):
         img_path = self.df.iloc[idx]['image_path']
-        label = self.df.iloc[idx]['label'] - 1
+        label = self.df.iloc[idx]['label']
         full_path = os.path.join(self.img_dir, img_path)
         image = Image.open(full_path).convert('RGB')
         image = self.transform(image)

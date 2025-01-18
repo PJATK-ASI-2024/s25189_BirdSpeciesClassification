@@ -73,8 +73,7 @@ class Trainer:
 
             if val_acc > best_acc:
                 best_acc = val_acc
-                training_id = datetime.now().strftime("%Y%m%d_%H%M%S")
-                model_path = f'saved_models/best_model_{training_id}.pth'
+                model_path = 'saved_models/best_model.pth'
                 os.makedirs(os.path.dirname(model_path), exist_ok=True)
                 torch.save(self.model.state_dict(), model_path)
                 print(f'Model saved as {model_path}')

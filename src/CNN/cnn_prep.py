@@ -39,7 +39,7 @@ def create_image_labels(script_dir, logger, train_df, test_df):
     train_labels = []
     for idx, row in train_df.iterrows():
         image_path = row['image_path']
-        label = row['class_id']
+        label = row['class_id'] - 1
         train_labels.append((image_path, label))
     train_labels_df = pd.DataFrame(train_labels, columns=['image_path', 'label'])
     logger.info('Training labels generated successfully. Saving labels.csv to disk.')
@@ -56,7 +56,10 @@ def create_image_labels(script_dir, logger, train_df, test_df):
 
 def split_train_test(script_dir):
     """80/20 Train/test split"""
-    meta_df = load_metadata(os.path.join(script_dir, '..', '..', 'data', 'train', 'metadata.csv'))
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    data_path = os.path.realpath(os.path.join(script_dir, "..", "..", "data", "train", "metadata.csv"))
+    print("path_to_meta:", data_path)
+    meta_df = load_metadata(data_path)
     print(meta_df.head())
     all_indices = meta_df.index.tolist()
     print(len(all_indices))

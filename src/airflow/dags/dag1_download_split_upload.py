@@ -10,8 +10,9 @@ default_args = {
 }
 
 def run_script(script_path):
-    """Run a Python script."""
-    os.system(f"python {script_path}")
+    exit_code = os.system(f"python3 {script_path}")
+    if exit_code != 0:
+        raise RuntimeError(f"Script {script_path} failed with code {exit_code}")
 
 with DAG(
     dag_id='data_prep_pipeline',
