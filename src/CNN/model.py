@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import torchvision.models as models
 
 class BirdCNNModel(nn.Module):
     def __init__(self, num_classes=200):
@@ -34,4 +35,13 @@ class BirdCNNModel(nn.Module):
             x = self.features(x)
             x = x.view(x.size(0), -1)
             x = self.classifier(x)
-            return x        
+            return x 
+
+class BirdResNetModel(nn.Module):
+    def __init__(self, num_classes=200):
+        super(BirdResNetModel, self).__init__()
+        self.model = models.resnet50(pretrained=True)  # Load pre-trained ResNet50
+        self.model.fc = nn.Linear(self.model.fc.in_features, num_classes)  # Replace final layer
+
+    def forward(self, x):
+        return self.model(x)       

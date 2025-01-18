@@ -9,3 +9,8 @@ gspread<5.0.0
 oauth2client 
 scikit-learn
 apache-airflow==2.6.0
+seaborn
+tpot
+torch
+torchvision
+tensorflow

@@ -1,5 +1,4 @@
 import torch
-
 class Config:
     def __init__(self):
         self.train_img_dir = "data/train/split/train/images/raw"
@@ -9,9 +8,9 @@ class Config:
 
         # Hyperparameters
         self.batch_size = 32
-        self.num_workers = 4
-        self.lr = 0.001
+        self.num_workers = 1
+        self.lr = 0.0001
         self.num_epochs = 10
-        self.image_size = (244,244)
+        self.image_size = (224, 224)
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        self.num_classes = 200 # CUB -> 200 labels
+        self.num_classes = 200  # CUB dataset -> 200 labels
