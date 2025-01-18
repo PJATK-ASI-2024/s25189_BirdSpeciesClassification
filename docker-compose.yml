@@ -78,6 +78,7 @@ services:
     command: >
       bash -c "airflow db upgrade &&
                airflow scheduler"
+    shm_size: '2g'
 
 volumes:
   airflow_logs:
