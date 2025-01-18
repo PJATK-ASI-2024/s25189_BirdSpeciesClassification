@@ -1,0 +1,11 @@
+kagglehub
+pillow 
+matplotlib 
+numpy 
+pandas 
+seaborn 
+sweetviz 
+gspread<5.0.0
+oauth2client 
+scikit-learn
+apache-airflow==2.6.0

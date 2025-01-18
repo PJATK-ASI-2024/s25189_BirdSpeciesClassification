@@ -137,7 +137,16 @@ def main():
     log_file_path = setup_logging()
     logging.info("Starting data preparation script")
 
+    # Create necessary directories
     create_directories()
+
+    # Ensure the reports/figures directory exists
+    figures_path = "reports/figures"
+    if not os.path.exists(figures_path):
+        os.makedirs(figures_path)
+        logging.info(f"Created directory: {figures_path}")
+
+    # Data preparation steps
     RAW_DATA_PATH = download_archive()
     unzip_data(RAW_DATA_PATH)
 
@@ -150,8 +159,9 @@ def main():
     class_counts = meta_df["class_id"].value_counts()
     logging.info("Class counts: %s", class_counts)
 
+    # Plot class distribution
     class_counts.plot(kind="bar", figsize=(12, 4), title="Class Distribution")
-    plt.savefig("reports/figures/class_distribution.png")
+    plt.savefig(os.path.join(figures_path, "class_distribution.png"))
 
     train_df, finetune_df = split_data(meta_df)
 
@@ -170,6 +180,7 @@ def main():
 
     logging.info("Data preparation complete")
     logging.info("Log file saved to: %s", log_file_path)
+
 
 if __name__ == "__main__":
     main()
