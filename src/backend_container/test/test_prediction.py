@@ -91,6 +91,10 @@ def test_predict(data):
     assert predicted_class_id == true_class_id, f"Incorrect prediction for {image_path}: expected {true_class_id}, got {predicted_class_id}"
 
 
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
+
 def evaluate_predictions():
     y_true = []
     y_pred = []
@@ -127,14 +131,68 @@ def evaluate_predictions():
 
     # Create a mapping for target names
     id_to_class_name = {item["class_id"]: item["class_name"] for item in metadata}
-    target_names = [id_to_class_name.get(class_id, "Unknown") for class_id in unique_class_ids]
+    target_names = [id_to_class_name.get(class_id, f"Unknown ({class_id})") for class_id in unique_class_ids]
 
-    # Calculate and display metrics
+    # Calculate metrics
     accuracy = accuracy_score(y_true, y_pred)
-    report = classification_report(y_true, y_pred, labels=unique_class_ids, target_names=target_names, zero_division=0)
+    report = classification_report(y_true, y_pred, labels=unique_class_ids, target_names=target_names, zero_division=0, output_dict=True)
 
-    print(f"Accuracy: {accuracy:.2f}")
-    print(report)
+    # Generate Confusion Matrix
+    cm = confusion_matrix(y_true, y_pred, labels=unique_class_ids)
+
+    # Summarize misclassifications
+    misclassifications = cm.sum(axis=1) - cm.diagonal()
+    misclassified_classes = [
+        (id_to_class_name.get(class_id, f"Unknown ({class_id})"), misclassifications[i])
+        for i, class_id in enumerate(unique_class_ids)
+    ]
+    misclassified_classes = sorted(misclassified_classes, key=lambda x: x[1], reverse=True)[:10]  # Top 10 misclassified classes
+
+    # Plot top misclassified classes
+    misclassified_figure_path = os.path.join(BASE_DIR, "top_misclassified_classes.png")
+    plt.figure(figsize=(12, 6))
+    class_names, misclass_counts = zip(*misclassified_classes)
+    plt.barh(class_names, misclass_counts, color="salmon")
+    plt.xlabel("Number of Misclassifications")
+    plt.ylabel("Class Name")
+    plt.title("Top Misclassified Classes")
+    plt.gca().invert_yaxis()
+    plt.tight_layout()
+    plt.savefig(misclassified_figure_path)
+    plt.close()
+
+    # Generate report content
+    markdown_content = f"# Test Report\n\n"
+    markdown_content += f"## Summary\n\n"
+    markdown_content += f"- **Accuracy**: {accuracy:.2f}\n"
+    markdown_content += f"- **Number of Images Tested**: {len(y_true)}\n"
+    markdown_content += f"- **Unique Classes Tested**: {len(unique_class_ids)}\n\n"
+
+    markdown_content += f"## Classification Report\n\n"
+    markdown_content += "| Class Name | Precision | Recall | F1-Score | Support |\n"
+    markdown_content += "|------------|-----------|--------|----------|---------|\n"
+
+    for class_id, metrics in zip(unique_class_ids, report.values()):
+        if isinstance(metrics, dict):
+            class_name = id_to_class_name.get(class_id, f"Unknown ({class_id})")
+            precision = metrics["precision"]
+            recall = metrics["recall"]
+            f1_score = metrics["f1-score"]
+            support = metrics["support"]
+            markdown_content += f"| {class_name} | {precision:.2f} | {recall:.2f} | {f1_score:.2f} | {int(support)} |\n"
+
+    markdown_content += f"\n## Top Misclassified Classes\n\n"
+    markdown_content += f"![Top Misclassified Classes](top_misclassified_classes.png)\n\n"
+
+    # Save to file
+    report_file = os.path.join(BASE_DIR, "test_report.md")
+    with open(report_file, "w") as f:
+        f.write(markdown_content)
+
+    print(f"Test report saved to '{report_file}'")
+    print(f"Top misclassified classes chart saved to '{misclassified_figure_path}'")
+
+
 
 
 
