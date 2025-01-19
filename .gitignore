@@ -9,3 +9,4 @@ data/
 logs/
 .idea/
 src/airflow/credentials/credentials.json
+src/backend_container/test/images/
