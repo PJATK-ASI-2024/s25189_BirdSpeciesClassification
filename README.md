@@ -36,6 +36,18 @@ The data will be split 70/30 for training and fine-tuning.
 
 The aim of this project is to build and train a machine learning model that can classify bird species based on a photo and its metadata.
 
+## ```ResNet```
+
+ResNet (Residual Networks) was chosen for this project due to its proven performance in image classification tasks and its ability to mitigate the vanishing gradient problem in deep networks. Specifically, I used ResNet-50, a deep convolutional neural network with 50 layers. This model is pre-trained on ImageNet, providing a robust foundation for feature extraction.
+
+By retraining the final fully connected layer with the bird species dataset, the model adapts its learned features to the unique characteristics of this domain, such as feather patterns, colorations, and shapes.
+
+### Key Advantages of ResNet for this Project:
+
+- Feature Hierarchies: ResNet's architecture allows it to effectively learn hierarchical features, critical for distinguishing subtle differences between bird species.
+- Efficiency: Pre-trained weights reduce training time and computational requirements.
+- Transfer Learning: Fine-tuning the model ensures that it is retrained specifically for bird species classification while leveraging the general image recognition knowledge it already possesses.
+
 ## Testing the Model
 
 ### 1. Building and Running the Docker Container
