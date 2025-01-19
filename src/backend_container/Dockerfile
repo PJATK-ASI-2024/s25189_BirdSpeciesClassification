@@ -14,6 +14,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code
 COPY main.py /app/
 
+# Set the environment variable
+ENV RUN_MODE=container
+
 # Expose the API port
 EXPOSE 5000
 
