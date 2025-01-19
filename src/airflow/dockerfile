@@ -1,9 +1,18 @@
 FROM apache/airflow:2.6.0
 
+# Switch to root user for installations
 USER root
-RUN apt-get update && apt-get install -y gcc
 
+# Install required system packages, including Docker CLI and GCC
+RUN apt-get update && apt-get install -y \
+    gcc \
+    docker.io && \
+    apt-get clean
+
+# Switch back to airflow user
 USER airflow
+
+# Install Python dependencies via pip
 RUN pip install --no-cache-dir \
     kagglehub \
     pillow \
@@ -16,11 +25,11 @@ RUN pip install --no-cache-dir \
     oauth2client \
     scikit-learn \
     teapot \
-    seaborn \
     torch \
     torchvision \
     tensorflow \
     pytest
 
+# Copy additional Python requirements and install them
 COPY requirements.txt /requirements.txt
 RUN pip install -r /requirements.txt
