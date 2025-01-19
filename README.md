@@ -78,3 +78,54 @@ A REST API for classifying bird images using a pre-trained ResNet model.
 #### API Endpoints
 
 - POST ```/predict```: Accepts an image and returns the predicted class.
+
+### 3. Running prepared automated testing 
+
+The API endpoints runs in two modes. One that allows it to run locally ```--mode local``` and the other that runs on the container which is being pulled from the environment variable. 
+
+#### Generating test data
+
+From the previously downloaded dataset (using ```01_data_prep.py```) you can generate random photographies and a metadata to evaluate the api:
+
+
+    python -u "absolute_path_to_generator\generate_test_data.py" --num-images 5
+
+
+- num-images represents the amount of test data you want to generate
+
+After that, you will have a random selection of images and a ```metadata.json``` file that will be used for testing.
+
+#### Running test
+
+In order to run the test you have to launch ```test_prediction.py``` with an argument --mode local
+
+
+    python -u "absolute_path_to_test_file\test_prediction.py" --mode local
+
+This will generate a test report in .md format.
+
+#### Example test report
+
+# Test Report
+
+## Summary
+
+- **Accuracy**: 0.80
+- **Number of Images Tested**: 5
+- **Unique Classes Tested**: 6
+
+## Classification Report
+
+| Class Name | Precision | Recall | F1-Score | Support |
+|------------|-----------|--------|----------|---------|
+| Unknown | 0.00 | 0.00 | 0.00 | 0 |
+| Pelagic Cormorant | 0.00 | 0.00 | 0.00 | 1 |
+| Scissor tailed Flycatcher | 1.00 | 1.00 | 1.00 | 1 |
+| Pied billed Grebe | 1.00 | 1.00 | 1.00 | 1 |
+| Heermann Gull | 1.00 | 1.00 | 1.00 | 1 |
+| Cape May Warbler | 1.00 | 1.00 | 1.00 | 1 |
+
+## Confusion Matrix
+
+Here will be a confusion matrix
+
