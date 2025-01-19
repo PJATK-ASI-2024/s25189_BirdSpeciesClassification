@@ -8,7 +8,6 @@ import torch.nn as nn
 from torchvision import models, transforms
 from PIL import Image
 
-# Define model class
 class BirdResNetModel(nn.Module):
     def __init__(self, num_classes=200):
         super(BirdResNetModel, self).__init__()
@@ -18,24 +17,19 @@ class BirdResNetModel(nn.Module):
     def forward(self, x):
         return self.model(x)
 
-# Define FastAPI app
 main = FastAPI()
 
-# Detect mode: local or container
-MODE = os.environ.get("RUN_MODE", "local")  # Default to 'local'
+MODE = os.environ.get("RUN_MODE", "local")
 if MODE == "container":
     base_dir = "/app"
 else:
     base_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Configure paths
 model_path = os.path.join(base_dir, "model/best_model.pth")
 class_mapping_path = os.path.join(base_dir, "model/class_mappings/updated_class_mapping.json")
 
-# Device setup
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# Load model
 model = BirdResNetModel(num_classes=200)
 try:
     model.load_state_dict(torch.load(model_path, map_location=device))
@@ -43,14 +37,12 @@ try:
 except Exception as e:
     raise RuntimeError(f"Failed to load the model: {e}")
 
-# Image transformations
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
-# Load class mapping
 try:
     with open(class_mapping_path, "r") as f:
         class_mapping = json.load(f)
@@ -60,17 +52,14 @@ except Exception as e:
 @main.post("/predict")
 async def predict(file: UploadFile = File(...)):
     try:
-        # Load image
         image = Image.open(io.BytesIO(await file.read())).convert("RGB")
         image = transform(image).unsqueeze(0).to(device)
 
-        # Perform prediction
         with torch.no_grad():
             outputs = model(image)
             probabilities = torch.softmax(outputs, dim=1)
             predicted_class_id = torch.argmax(probabilities, dim=1).item()
 
-        # Get class name
         predicted_class_name = class_mapping.get(str(predicted_class_id + 1), "Unknown")
 
         return JSONResponse({
