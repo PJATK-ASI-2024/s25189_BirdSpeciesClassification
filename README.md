@@ -88,10 +88,11 @@ The API endpoints runs in two modes. One that allows it to run locally ```--mode
 From the previously downloaded dataset (using ```01_data_prep.py```) you can generate random photographies and a metadata to evaluate the api:
 
 
-    python -u "absolute_path_to_generator\generate_test_data.py" --num-images 5
+    generate_test_images.py --num-images-per-class 3 --max-images 20
 
 
 - num-images represents the amount of test data you want to generate
+- num-images-per-class represents how much images per class should be included (watch for the math)
 
 After that, you will have a random selection of images and a ```metadata.json``` file that will be used for testing.
 
@@ -125,7 +126,6 @@ This will generate a test report in .md format.
 | Heermann Gull | 1.00 | 1.00 | 1.00 | 1 |
 | Cape May Warbler | 1.00 | 1.00 | 1.00 | 1 |
 
-## Confusion Matrix
+## Top misclassified classes
 
-Here will be a confusion matrix
-
+Here will be a bar chart representing top misclassified classes
