@@ -27,6 +27,8 @@ x-airflow-common: &airflow-common
     - airflow_plugins:/opt/airflow/plugins
     - ./src/airflow/credentials:/opt/airflow/credentials
     - ./saved_models:/opt/airflow/saved_models
+    - ./src/backend_container:/opt/airflow/backend_container
+    - /var/run/docker.sock:/var/run/docker.sock  # Mount Docker socket
 
 services:
   postgres:
@@ -75,7 +77,6 @@ services:
       bash -c "airflow db upgrade &&
                airflow webserver"
 
-
   airflow-scheduler:
     build:
       context: ./src/airflow
@@ -88,7 +89,7 @@ services:
       bash -c "airflow db upgrade &&
                airflow scheduler"
     shm_size: '2g'
-    
+
 volumes:
   airflow_logs:
   airflow_plugins:
