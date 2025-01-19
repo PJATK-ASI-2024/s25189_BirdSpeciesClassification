@@ -35,3 +35,46 @@ Data will be split 70/30 (training/fine-tuning)
 ## Aim of this projec and structure
 
     The aim of this project is to build and train a ML model. It will take a photo and its metadata and based on that will classify a bird to a particular species. 
+
+## Testing the model
+
+### 1. Building and running Docker Container
+
+#### Build the Docker Image
+
+Run the following command in the directory ```backend_container``` containing ```Dockerfile```:
+
+    docker build -t bird-classifier-api .
+
+#### Run the Docker Container
+
+    docker run -p 5000:5000 bird-classifier-api
+
+### 2. Testing the API
+
+#### Overview
+
+A REST API for classifying bird images using a pre-trained ResNet model.
+
+#### Requirements
+
+- Docker
+- Python 3.9+
+
+#### Using ```curl```
+
+    curl -X POST -F "file=@path/to/image.jpg" http://localhost:5000/predict
+
+#### Using Postman
+
+1. Select ```POST``` method.
+2. Set URL  to ```http://localhost:5000/predict```
+3. Under ```Body```, choose ```form-data``` and add a key named ```file``` with the image file as its value.
+
+#### Expected result
+
+    {"class_id":74,"class_name":"Florida Jay"}
+
+#### API Endpoints
+
+- POST ```/predict```: Accepts an image and returns the predicted class.
