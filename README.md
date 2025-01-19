@@ -1,54 +1,58 @@
-# Bird species classification
+# Bird Species Classification
 
 ## Introduction
 
-Main aim of this project is to create a machine learning model that can be used to classify bird species based on images and metadata attached to an image like:
+The main aim of this project is to create a machine learning model that can classify bird species based on images and metadata such as:
 
-    - Longitude and Latitude of the picture made
-    - Time of year or month of the picture taken (some species show up seasonally)
-    - Size of an image
-    - Mean RGB values (or other colour range)
-    - Amount of pixels dominated by a particular colour (brown, white, black etc. -> feathering of a bird)
+- Longitude and Latitude of the picture
+- Time of year or month the picture was taken (some species are seasonal)
+- Size of the image
+- Mean RGB values (or other color ranges)
+- Amount of pixels dominated by a particular color (e.g., brown, white, black)
 
-## Business problem
+## Business Problem
 
-Bird species classification requires extensive knowledge in the field of ornitology. Automatization of this process can allow for:
+Bird species classification requires extensive knowledge in ornithology. Automating this process can:
 
-    - Less time taken to analyze and predict an actual species
-    - Take off some workload from scientists and hobbyist.
-    - Usage in mobile application (ie. take a photo, analyze it on the go and show exactly what kind of bird it is)
+- Reduce the time needed to analyze and predict bird species
+- Decrease the workload for scientists and hobbyists
+- Enable usage in mobile applications (e.g., take a photo, analyze it on the go, and identify the bird species)
 
-## Data and its source
+## Data and Source
 
-Data come from a public repository on Kaggle [200 Bird Species](https://www.kaggle.com/datasets/veeralakrishna/200-bird-species-with-11788-images/code)
+The data comes from a public repository on Kaggle: [200 Bird Species](https://www.kaggle.com/datasets/veeralakrishna/200-bird-species-with-11788-images/code).
 
 It consists of:
 
-    - 11,788 Images showing 200 different birds
-    - Annotations per image: 
-      - 15 Part location
-      - 312 Binary attributes
-      - 1 Bounding box
+- 11,788 images showing 200 different bird species
+- Annotations per image:
+    - 15 part locations
+    - 312 binary attributes
+    - 1 bounding box
 
-Data will be split 70/30 (training/fine-tuning)
+The data will be split 70/30 for training and fine-tuning.
 
-## Aim of this projec and structure
+## Project Aim and Structure
 
-    The aim of this project is to build and train a ML model. It will take a photo and its metadata and based on that will classify a bird to a particular species. 
+The aim of this project is to build and train a machine learning model that can classify bird species based on a photo and its metadata.
 
-## Testing the model
+## Testing the Model
 
-### 1. Building and running Docker Container
+### 1. Building and Running the Docker Container
 
 #### Build the Docker Image
 
-Run the following command in the directory ```backend_container``` containing ```Dockerfile```:
+Run the following command in the `backend_container` directory containing the `Dockerfile`:
 
-    docker build -t bird-classifier-api .
+```sh
+docker build -t bird-classifier-api .
+```
 
 #### Run the Docker Container
 
-    docker run -p 5000:5000 bird-classifier-api
+```sh
+docker run -p 5000:5000 bird-classifier-api
+```
 
 ### 2. Testing the API
 
@@ -61,51 +65,56 @@ A REST API for classifying bird images using a pre-trained ResNet model.
 - Docker
 - Python 3.9+
 
-#### Using ```curl```
+#### Using `curl`
 
-    curl -X POST -F "file=@path/to/image.jpg" http://localhost:5000/predict
+```sh
+curl -X POST -F "file=@path/to/image.jpg" http://localhost:5000/predict
+```
 
 #### Using Postman
 
-1. Select ```POST``` method.
-2. Set URL  to ```http://localhost:5000/predict```
-3. Under ```Body```, choose ```form-data``` and add a key named ```file``` with the image file as its value.
+1. Select the `POST` method.
+2. Set the URL to `http://localhost:5000/predict`.
+3. Under `Body`, choose `form-data` and add a key named `file` with the image file as its value.
 
-#### Expected result
+#### Expected Result
 
-    {"class_id":74,"class_name":"Florida Jay"}
+```json
+{"class_id": 74, "class_name": "Florida Jay"}
+```
 
 #### API Endpoints
 
-- POST ```/predict```: Accepts an image and returns the predicted class.
+- POST `/predict`: Accepts an image and returns the predicted class.
 
-### 3. Running prepared automated testing 
+### 3. Running Prepared Automated Testing
 
-The API endpoints runs in two modes. One that allows it to run locally ```--mode local``` and the other that runs on the container which is being pulled from the environment variable. 
+The API endpoints run in two modes: local (`--mode local`) and container (pulled from the environment variable).
 
-#### Generating test data
+#### Generating Test Data
 
-From the previously downloaded dataset (using ```01_data_prep.py```) you can generate random photographies and a metadata to evaluate the api:
+From the previously downloaded dataset (using `01_data_prep.py`), you can generate random photographs and metadata to evaluate the API:
 
+```sh
+generate_test_images.py --num-images-per-class 3 --max-images 20
+```
 
-    generate_test_images.py --num-images-per-class 3 --max-images 20
+- `num-images`: The amount of test data you want to generate
+- `num-images-per-class`: The number of images per class to include
 
+After that, you will have a random selection of images and a `metadata.json` file for testing.
 
-- num-images represents the amount of test data you want to generate
-- num-images-per-class represents how much images per class should be included (watch for the math)
+#### Running the Test
 
-After that, you will have a random selection of images and a ```metadata.json``` file that will be used for testing.
+To run the test, launch `test_prediction.py` with the argument `--mode local`:
 
-#### Running test
-
-In order to run the test you have to launch ```test_prediction.py``` with an argument --mode local
-
-
-    python -u "absolute_path_to_test_file\test_prediction.py" --mode local
+```sh
+python -u "absolute_path_to_test_file/test_prediction.py" --mode local
+```
 
 This will generate a test report in .md format.
 
-#### Example test report
+#### Example Test Report
 
 # Test Report
 
@@ -121,11 +130,11 @@ This will generate a test report in .md format.
 |------------|-----------|--------|----------|---------|
 | Unknown | 0.00 | 0.00 | 0.00 | 0 |
 | Pelagic Cormorant | 0.00 | 0.00 | 0.00 | 1 |
-| Scissor tailed Flycatcher | 1.00 | 1.00 | 1.00 | 1 |
-| Pied billed Grebe | 1.00 | 1.00 | 1.00 | 1 |
-| Heermann Gull | 1.00 | 1.00 | 1.00 | 1 |
+| Scissor-tailed Flycatcher | 1.00 | 1.00 | 1.00 | 1 |
+| Pied-billed Grebe | 1.00 | 1.00 | 1.00 | 1 |
+| Heermann's Gull | 1.00 | 1.00 | 1.00 | 1 |
 | Cape May Warbler | 1.00 | 1.00 | 1.00 | 1 |
 
-## Top misclassified classes
+## Top Misclassified Classes
 
-Here will be a bar chart representing top misclassified classes
+Here will be a bar chart representing top misclassified classes.
