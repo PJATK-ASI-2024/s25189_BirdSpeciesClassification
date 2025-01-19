@@ -13,7 +13,7 @@ parser = argparse.ArgumentParser(description="Test the prediction endpoint local
 parser.add_argument("--mode", choices=["local", "container"], required=True, help="Run mode: 'local' or 'container'")
 args = parser.parse_args()
 
-# Constants
+# Constant
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Configure paths based on mode
